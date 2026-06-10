@@ -427,6 +427,101 @@ textarea { resize: none; display: block; }
 }
 #success p { font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-soft); line-height: 1.9; }
 
+/* HERO STATEMENT */
+.hero-statement {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  line-height: 1.5; color: var(--ink-mid);
+  border-left: 0.5px solid var(--border);
+  padding-left: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0; animation: rise 1s 1.1s forwards;
+}
+
+/* PROBLEM VALVE */
+.problem-valve {
+  margin-top: 4rem;
+  padding: 2.5rem 2rem;
+  background: var(--ink);
+  color: rgba(255,255,255,0.82);
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.55;
+  border-left: 3px solid rgba(255,255,255,0.15);
+}
+.problem-valve em {
+  font-weight: 600; color: rgba(255,255,255,0.95);
+  font-style: italic;
+}
+
+/* SVC italic emphasis */
+.svc-items li em {
+  font-style: italic; color: var(--ink); font-family: var(--serif);
+  font-size: 0.78rem; font-weight: 600;
+}
+
+/* LAYER BRIDGE */
+.layer-bridge {
+  margin-top: 5rem;
+  padding: 2.5rem 0;
+  border-top: 0.5px solid var(--border);
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+.layer-bridge-label {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.layer-bridge-link {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.15rem; color: var(--ink); text-decoration: none;
+  display: flex; align-items: baseline; gap: 1.2rem; flex-wrap: wrap;
+  transition: color 0.2s;
+}
+.layer-bridge-link:hover { color: var(--ink-mid); }
+.layer-bridge-arrow {
+  font-family: var(--mono); font-weight: 400; font-style: normal;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-soft); border: 0.5px solid var(--border);
+  padding: 0.4rem 1rem; transition: border-color 0.2s, color 0.2s;
+}
+.layer-bridge-link:hover .layer-bridge-arrow { border-color: var(--ink-soft); color: var(--ink); }
+
+/* LAYER MAP in footer */
+.layer-map {
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  padding-bottom: 2rem; margin-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.layer-sep {
+  font-size: 0.65rem; color: var(--border);
+}
+.layer-node {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  text-decoration: none; opacity: 0.5; transition: opacity 0.2s;
+}
+.layer-node:hover { opacity: 0.8; }
+.layer-node-active { opacity: 1; }
+.layer-node-label {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 0.85rem; color: var(--ink);
+}
+.layer-node-sub {
+  font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.layer-node-active .layer-node-label { color: var(--ink); }
+.layer-node-active .layer-node-sub {
+  color: var(--ink-mid);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .layer-map { gap: 1rem; }
+  .layer-sep { display: none; }
+  .layer-node { opacity: 0.6; }
+  .hero-statement { font-size: 1rem; }
+}
+
 /* FOOTER */
 footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
 .footer-inner {
@@ -528,6 +623,11 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
     </p>
   </div>
 
+  <div class="hero-statement reveal-inline">
+    Tôi không bán giải pháp chắp vá.<br>
+    Tôi thay đổi cấu trúc đang tạo ra triệu chứng.
+  </div>
+
   <div class="hero-cta-row">
     <a href="#cal" class="btn-primary">Đặt lịch trao đổi &nbsp;→</a>
     <span class="hero-note">Không cam kết. Bắt đầu bằng một cuộc trò chuyện.</span>
@@ -589,6 +689,11 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
     </div>
 
   </div>
+
+  <div class="problem-valve reveal">
+    Thứ bạn đang thiếu không phải là một giải pháp mới.<br>
+    Mà là một mô hình để hiểu <em>vì sao vấn đề cứ quay trở lại.</em>
+  </div>
 </div>
 </section>
 
@@ -609,10 +714,10 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
       <div class="svc-name">Knowledge System</div>
       <span class="svc-when">Khi tri thức nằm trong đầu người</span>
       <ul class="svc-items">
+        <li>Thiết kế <em>không gian chứa context</em> — không phải viết tài liệu</li>
         <li>Lập bản đồ tri thức tổ chức</li>
-        <li>Thiết kế kiến trúc lưu trữ</li>
-        <li>Tạo con đường tiếp cận theo ngữ cảnh</li>
-        <li>Xây dựng bộ nhớ tổ chức</li>
+        <li>Tạo con đường tiếp cận theo ngữ cảnh và vai trò</li>
+        <li>Xây dựng bộ nhớ tổ chức có thể duy trì</li>
       </ul>
     </div>
     <div class="svc-card">
@@ -620,10 +725,10 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
       <div class="svc-name">Decision System</div>
       <span class="svc-when">Khi founder là bottleneck</span>
       <ul class="svc-items">
-        <li>Thiết kế nguyên tắc ra quyết định</li>
+        <li>Thiết kế <em>vách ngăn và bộ lọc quyền hạn</em> — giải phóng bộ não founder</li>
+        <li>Nguyên tắc ra quyết định có thể chia sẻ</li>
         <li>Phân cấp quyền hạn có cấu trúc</li>
-        <li>Xây dựng luồng thông tin quyết định</li>
-        <li>Logic quản trị nội bộ</li>
+        <li>Logic quản trị nội bộ tự vận hành</li>
       </ul>
     </div>
     <div class="svc-card">
@@ -631,10 +736,10 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
       <div class="svc-name">AI Enablement</div>
       <span class="svc-when">Khi AI không tạo ra giá trị thực</span>
       <ul class="svc-items">
-        <li>Đánh giá mức độ sẵn sàng cho AI</li>
+        <li>Chuẩn hóa <em>nền móng sạch</em> trước khi thả AI vào</li>
         <li>Thiết kế tầng context cho AI</li>
-        <li>Chuẩn hóa nền tri thức bên dưới</li>
-        <li>Thiết kế luồng Human-AI</li>
+        <li>Đánh giá mức độ sẵn sàng thực tế</li>
+        <li>Thiết kế luồng Human-AI có kiểm soát</li>
       </ul>
     </div>
   </div>
@@ -931,11 +1036,35 @@ footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
     <h3>Đã nhận.</h3>
     <p>Tôi sẽ đọc qua và phản hồi trong vòng 24–48 giờ.<br>Nếu phù hợp — chúng ta sẽ nói chuyện tiếp.</p>
   </div>
+
+  <div class="layer-bridge reveal">
+    <span class="layer-bridge-label">Tiếp theo</span>
+    <a href="#" class="layer-bridge-link">
+      Hệ thống này vận hành trong thực tại như thế nào?
+      <span class="layer-bridge-arrow">→ Xem Mạch Vận Hành</span>
+    </a>
+  </div>
 </div>
 </section>
 
 <footer>
 <div class="wrap">
+  <div class="layer-map reveal">
+    <a href="#" class="layer-node">
+      <span class="layer-node-label">Hành Trình</span>
+      <span class="layer-node-sub">hljourney — Thực Tại & Pattern</span>
+    </a>
+    <span class="layer-sep">→</span>
+    <a href="#" class="layer-node layer-node-active">
+      <span class="layer-node-label">Kiến Trúc</span>
+      <span class="layer-node-sub">hlkarchitect — Cấu Trúc Gốc & Giải Pháp</span>
+    </a>
+    <span class="layer-sep">→</span>
+    <a href="#" class="layer-node">
+      <span class="layer-node-label">Vận Hành</span>
+      <span class="layer-node-sub">Thực Thi & Protocol</span>
+    </a>
+  </div>
   <div class="footer-inner">
     <span>HL · 2026</span>
     <span class="footer-center">Tri thức · Quyết định · Hệ thống</span>
