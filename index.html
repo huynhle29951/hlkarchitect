@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HL — Strategic Knowledge & Decision Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,300;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:    #fbf7f4;
+  --stone:    #f3ece7;
+  --border:   #e2d7d0;
+  --ink:      #1a1614;
+  --ink-mid:  #5a4f48;
+  --ink-soft: #9a8f88;
+  --serif: 'Cormorant Garamond', serif;
+  --mono:  'Space Mono', monospace;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+#bar {
+  position: fixed; top: 0; left: 0;
+  height: 0.5px; width: 0%;
+  background: var(--ink-soft);
+  z-index: 1000; transition: width 0.1s linear;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(251,247,244,0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 0.5px solid var(--border);
+  z-index: 100;
+}
+.nav-brand {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.05rem; color: var(--ink); letter-spacing: 0.02em;
+}
+.nav-brand span { font-weight: 300; color: var(--ink-mid); }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-link {
+  font-size: 0.56rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-soft); text-decoration: none; transition: color 0.2s;
+}
+.nav-link:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  padding: 0.6rem 1.4rem; border: 0.5px solid var(--border);
+  transition: border-color 0.25s, background 0.25s;
+}
+.nav-cta:hover { border-color: var(--ink-mid); background: rgba(26,22,20,0.03); }
+
+/* LAYOUT */
+.wrap { max-width: 780px; margin: 0 auto; padding: 0 3rem; }
+section { padding: 9rem 0; }
+
+.sec-tag {
+  font-size: 0.52rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 3.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.sec-tag::after { content: ''; width: 28px; height: 0.5px; background: var(--border); }
+
+.section-h2 {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: clamp(1.9rem, 4.5vw, 3.1rem);
+  line-height: 1.15; color: var(--ink); margin-bottom: 5rem;
+}
+
+/* HERO */
+#hero {
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-top: 10rem; padding-bottom: 8rem;
+}
+.hero-label {
+  font-size: 0.52rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 3rem;
+  opacity: 0; animation: rise 1s 0.2s forwards;
+}
+h1 {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.1; letter-spacing: -0.01em;
+  color: var(--ink); max-width: 660px; margin-bottom: 3.5rem;
+  opacity: 0; animation: rise 1.1s 0.4s forwards;
+}
+h1 em { font-weight: 300; color: var(--ink-mid); font-style: italic; }
+.hero-divider {
+  display: flex; align-items: flex-start; gap: 2rem;
+  margin-bottom: 3.5rem;
+  opacity: 0; animation: rise 1s 0.65s forwards;
+}
+.hero-divider::before {
+  content: ''; width: 1px; height: 56px;
+  background: var(--border); flex-shrink: 0; margin-top: 0.2rem;
+}
+.hero-sub { font-size: 0.73rem; line-height: 1.9; color: var(--ink-mid); max-width: 400px; }
+.hero-cta-row {
+  display: flex; align-items: center; gap: 2.5rem;
+  opacity: 0; animation: rise 1s 0.9s forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--cream); text-decoration: none;
+  padding: 1rem 2rem; background: var(--ink);
+  border: 0.5px solid var(--ink); transition: background 0.25s;
+}
+.btn-primary:hover { background: #2d2622; }
+.hero-note { font-size: 0.56rem; letter-spacing: 0.12em; color: var(--ink-soft); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* PROBLEM */
+#problem {
+  background: var(--stone);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.problem-intro {
+  font-size: 0.82rem; line-height: 2; color: var(--ink-mid);
+  max-width: 560px; margin-bottom: 5rem;
+}
+.problem-intro strong {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.05rem; color: var(--ink); display: block;
+  margin-top: 0.4rem;
+}
+.problem-list { display: flex; flex-direction: column; }
+.prob-item {
+  display: grid; grid-template-columns: 5.5rem 1fr;
+  gap: 2.5rem; padding: 3rem 0;
+  border-top: 0.5px solid var(--border); transition: all 0.3s;
+}
+.prob-item:last-child { border-bottom: 0.5px solid var(--border); }
+.prob-num {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 3rem; line-height: 1; color: var(--border);
+  padding-top: 0.4rem; transition: color 0.3s;
+}
+.prob-item:hover .prob-num { color: var(--ink-soft); }
+.prob-symptom {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.3rem; color: var(--ink); margin-bottom: 0.5rem; line-height: 1.2;
+}
+.prob-root {
+  font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 0.9rem;
+}
+.prob-body { font-size: 0.72rem; line-height: 1.9; color: var(--ink-mid); }
+
+/* WHAT I DO */
+#what { background: var(--cream); }
+.what-intro {
+  font-size: 0.78rem; line-height: 2; color: var(--ink-mid);
+  max-width: 540px; margin-bottom: 6rem;
+  border-left: 0.5px solid var(--border); padding-left: 1.5rem;
+}
+.services {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.5px; background: var(--border); margin-bottom: 6rem;
+}
+.svc-card { background: var(--cream); padding: 2.8rem 2rem; transition: background 0.3s; }
+.svc-card:hover { background: var(--stone); }
+.svc-num {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 1.8rem; color: var(--border); line-height: 1;
+  margin-bottom: 1.8rem; display: block;
+}
+.svc-name {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.15rem; color: var(--ink); margin-bottom: 0.5rem; line-height: 1.25;
+}
+.svc-when {
+  font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 1.8rem; display: block;
+}
+.svc-items { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.svc-items li {
+  font-size: 0.64rem; line-height: 1.65; color: var(--ink-mid);
+  display: flex; gap: 0.8rem; align-items: baseline;
+}
+.svc-items li::before { content: '·'; color: var(--border); flex-shrink: 0; }
+
+/* OUTCOMES strip */
+.outcomes-strip {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 0.5px; background: var(--border); border: 0.5px solid var(--border);
+}
+.out-item {
+  background: var(--stone); padding: 1.8rem 2rem;
+  display: flex; gap: 1rem; align-items: baseline;
+}
+.out-mark {
+  font-family: var(--serif); font-style: italic;
+  color: var(--ink-soft); font-size: 1rem; flex-shrink: 0;
+}
+.out-text { font-size: 0.7rem; line-height: 1.75; color: var(--ink-mid); }
+
+/* HOW I WORK */
+#how {
+  background: var(--stone);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.how-contrast {
+  display: grid; grid-template-columns: 1fr 0.5px 1fr;
+  border: 0.5px solid var(--border); margin-bottom: 7rem;
+}
+.how-col { padding: 3rem 2.5rem; }
+.how-col-left { background: var(--stone); }
+.how-col-right { background: var(--cream); }
+.how-divider-v { background: var(--border); }
+.how-col-label {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 2rem;
+}
+.how-row {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.7rem;
+  padding: 1rem 0; border-bottom: 0.5px solid var(--border);
+}
+.how-row:first-of-type { border-top: 0.5px solid var(--border); }
+.how-symptom {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 0.95rem; color: var(--ink-mid);
+}
+.how-arrow { font-size: 0.6rem; color: var(--border); }
+.how-fix { font-size: 0.64rem; letter-spacing: 0.06em; color: var(--ink-soft); }
+.how-col-note {
+  margin-top: 1.8rem; font-size: 0.6rem; letter-spacing: 0.06em;
+  color: var(--ink-soft); font-style: italic; line-height: 1.75;
+}
+.how-step {
+  padding: 1rem 0; border-bottom: 0.5px solid var(--border);
+}
+.how-step:first-of-type { border-top: 0.5px solid var(--border); }
+.how-step-label {
+  font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 0.4rem;
+}
+.how-step-text { font-size: 0.72rem; line-height: 1.85; color: var(--ink-mid); }
+.how-col-note-dark { color: var(--ink-mid); }
+
+/* PROCESS steps */
+.process-steps { display: flex; flex-direction: column; }
+.step {
+  display: grid; grid-template-columns: 5.5rem 1fr;
+  gap: 2.5rem; padding: 2.8rem 0;
+  border-top: 0.5px solid var(--border);
+}
+.step:last-child { border-bottom: 0.5px solid var(--border); }
+.step-num {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 2.5rem; color: var(--border); line-height: 1; padding-top: 0.3rem;
+}
+.step-label {
+  font-size: 0.52rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 0.7rem;
+}
+.step-title {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.25rem; color: var(--ink); margin-bottom: 0.8rem; line-height: 1.2;
+}
+.step-body { font-size: 0.72rem; line-height: 1.9; color: var(--ink-mid); }
+
+/* CASES */
+#cases {
+  background: var(--cream);
+  border-top: 0.5px solid var(--border);
+}
+.cases-list { display: flex; flex-direction: column; }
+.case-item { padding: 4rem 0; border-top: 0.5px solid var(--border); }
+.case-item:last-child { border-bottom: 0.5px solid var(--border); }
+.case-head {
+  display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 2.5rem;
+}
+.case-num {
+  font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.case-tag {
+  font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink); background: var(--border); padding: 0.3rem 0.8rem;
+}
+.case-body { display: grid; grid-template-columns: 1fr auto; gap: 4rem; align-items: start; }
+.case-col { display: flex; flex-direction: column; }
+.case-row {
+  display: grid; grid-template-columns: 8rem 1fr;
+  gap: 2rem; padding: 1.4rem 0; border-bottom: 0.5px solid var(--border);
+}
+.case-row:first-child { border-top: 0.5px solid var(--border); }
+.case-row-label {
+  font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-soft); padding-top: 0.15rem; line-height: 1.6;
+}
+.case-row-val { font-size: 0.72rem; line-height: 1.85; color: var(--ink-mid); }
+.case-surface {
+  color: var(--ink-soft);
+  text-decoration: line-through; text-decoration-color: var(--border);
+}
+.case-result {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.8rem; min-width: 160px; max-width: 180px;
+  padding: 2.5rem 1.5rem;
+  background: var(--stone); border: 0.5px solid var(--border); text-align: center;
+}
+.case-result-num {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.9rem; line-height: 1; color: var(--ink); display: block;
+}
+.case-result-text { font-size: 0.6rem; line-height: 1.75; color: var(--ink-soft); letter-spacing: 0.04em; }
+
+/* BELIEF — dark section */
+#belief { background: var(--ink); }
+#belief .sec-tag { color: rgba(255,255,255,0.28); }
+#belief .sec-tag::after { background: rgba(255,255,255,0.1); }
+#belief .section-h2 { color: rgba(255,255,255,0.88); margin-bottom: 2rem; }
+.belief-intro {
+  font-size: 0.73rem; line-height: 2; color: rgba(255,255,255,0.42);
+  max-width: 460px; margin-bottom: 5rem;
+}
+.belief-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.5px; background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.06);
+}
+.belief-item { background: var(--ink); padding: 3rem 2.5rem; transition: background 0.3s; }
+.belief-item:hover { background: #211d1b; }
+.belief-mark {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(255,255,255,0.22); margin-bottom: 1.5rem;
+}
+.belief-quote {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 1.2rem; line-height: 1.5; color: rgba(255,255,255,0.8);
+  margin-bottom: 1rem;
+}
+.belief-note { font-size: 0.65rem; line-height: 1.8; color: rgba(255,255,255,0.35); }
+
+/* CAL */
+#cal { background: var(--cream); }
+#cal .section-h2 { margin-bottom: 1rem; }
+.cal-note {
+  font-size: 0.65rem; letter-spacing: 0.06em; color: var(--ink-soft);
+  margin-bottom: 5rem; max-width: 420px; line-height: 1.85;
+}
+.q-block { margin-bottom: 4rem; }
+.q-num {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 1.2rem;
+}
+.q-text {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.25rem; line-height: 1.4; color: var(--ink); margin-bottom: 2rem;
+}
+.opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.opt {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  padding: 0.75rem 1.4rem; border: 0.5px solid var(--border);
+  background: var(--cream); color: var(--ink-mid);
+  cursor: pointer; transition: all 0.22s ease;
+}
+.opt:hover { border-color: var(--ink-soft); color: var(--ink); }
+.opt.on {
+  background: var(--ink); color: var(--cream);
+  border-color: var(--ink); box-shadow: 0 4px 20px rgba(26,22,20,0.15);
+}
+.input-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.5px; margin-top: 3rem; margin-bottom: 0.5px;
+}
+input, textarea {
+  width: 100%; background: var(--stone); border: 0.5px solid var(--border);
+  color: var(--ink); font-family: var(--mono); font-size: 0.72rem;
+  padding: 1rem 1.2rem; outline: none;
+  transition: border-color 0.2s, background 0.2s; letter-spacing: 0.04em;
+}
+input::placeholder, textarea::placeholder { color: var(--ink-soft); }
+input:focus, textarea:focus { border-color: var(--ink-soft); background: var(--cream); }
+textarea { resize: none; display: block; }
+.btn-submit {
+  margin-top: 3rem; width: 100%;
+  background: var(--ink); color: var(--cream);
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+  padding: 1.3rem; border: none; cursor: pointer; transition: background 0.25s;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-submit:hover { background: #2d2622; }
+.form-note {
+  margin-top: 1.2rem; font-size: 0.52rem; letter-spacing: 0.12em;
+  color: var(--ink-soft); text-align: center;
+}
+#success { display: none; padding: 5rem 0; text-align: center; }
+#success h3 {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 2rem; color: var(--ink); margin-bottom: 1rem;
+}
+#success p { font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-soft); line-height: 1.9; }
+
+/* ĐẠI THẾ */
+#dathe {
+  background: var(--stone);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+
+.dathe-intro {
+  font-size: 0.73rem; line-height: 1.9; color: var(--ink-mid);
+  max-width: 520px; margin-bottom: 5rem;
+}
+
+.dathe-grid { display: flex; flex-direction: column; gap: 0; }
+
+.dathe-card {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 2.5rem;
+  padding: 4rem 0;
+  border-top: 0.5px solid var(--border);
+}
+.dathe-card:last-child { border-bottom: 0.5px solid var(--border); }
+
+.dathe-num {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 2.8rem; line-height: 1; color: var(--border);
+  padding-top: 0.3rem;
+}
+
+.dathe-content { display: flex; flex-direction: column; gap: 1.8rem; }
+
+.dathe-trend-label {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.dathe-trend {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.25rem; line-height: 1.3; color: var(--ink);
+}
+
+.dathe-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.5px; background: var(--border);
+}
+
+.dathe-block { padding: 2rem 1.8rem; }
+.dathe-block-friction { background: var(--cream); }
+.dathe-block-position { background: var(--ink); }
+
+.dathe-block-label {
+  font-size: 0.48rem; letter-spacing: 0.24em; text-transform: uppercase;
+  margin-bottom: 0.7rem;
+}
+.dathe-block-friction .dathe-block-label { color: var(--ink-soft); }
+.dathe-block-position .dathe-block-label { color: rgba(255,255,255,0.35); }
+
+.dathe-block-title {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.05rem; line-height: 1.2; margin-bottom: 1rem;
+}
+.dathe-block-friction .dathe-block-title { color: var(--ink); }
+.dathe-block-position .dathe-block-title { color: rgba(255,255,255,0.9); }
+
+.dathe-block-body { font-size: 0.68rem; line-height: 1.85; }
+.dathe-block-friction .dathe-block-body { color: var(--ink-mid); }
+.dathe-block-position .dathe-block-body { color: rgba(255,255,255,0.5); }
+
+@media (max-width: 700px) {
+  .dathe-card { grid-template-columns: 2.5rem 1fr; gap: 1.2rem; padding: 2.5rem 0; }
+  .dathe-num { font-size: 1.8rem; }
+  .dathe-row { grid-template-columns: 1fr; }
+  .dathe-block-position { border-top: 0.5px solid rgba(255,255,255,0.08); }
+}
+
+
+.hero-statement {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  line-height: 1.5; color: var(--ink-mid);
+  border-left: 0.5px solid var(--border);
+  padding-left: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0; animation: rise 1s 1.1s forwards;
+}
+
+/* PROBLEM VALVE */
+.problem-valve {
+  margin-top: 4rem;
+  padding: 2.5rem 2rem;
+  background: var(--ink);
+  color: rgba(255,255,255,0.82);
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.55;
+  border-left: 3px solid rgba(255,255,255,0.15);
+}
+.problem-valve em {
+  font-weight: 600; color: rgba(255,255,255,0.95);
+  font-style: italic;
+}
+
+/* SVC italic emphasis */
+.svc-items li em {
+  font-style: italic; color: var(--ink); font-family: var(--serif);
+  font-size: 0.78rem; font-weight: 600;
+}
+
+/* CO-CREATOR BLOCK */
+.cocreator-block {
+  border: 0.5px solid var(--border);
+  padding: 3rem 2.5rem;
+  margin-bottom: 5rem;
+  background: var(--stone);
+  position: relative;
+}
+
+.cocreator-tag {
+  font-size: 0.48rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 2.2rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.cocreator-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  border: 0.5px solid var(--ink-soft);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cocreator-body {
+  font-size: 0.73rem; line-height: 1.9; color: var(--ink-mid);
+  margin-bottom: 1rem;
+}
+.cocreator-body strong { color: var(--ink); font-weight: 700; }
+
+.cocreator-offer {
+  display: flex; flex-direction: column; gap: 0;
+  margin: 2rem 0;
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+
+.cocreator-offer-row {
+  display: flex; align-items: baseline; gap: 1.2rem;
+  padding: 1.2rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.cocreator-offer-row:last-child { border-bottom: none; }
+
+.cocreator-offer-mark {
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--ink-soft); flex-shrink: 0; width: 1rem;
+}
+
+.cocreator-offer-text {
+  font-size: 0.71rem; line-height: 1.85; color: var(--ink-mid);
+}
+
+.cocreator-cta-text {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.05rem; line-height: 1.4; color: var(--ink);
+  margin-top: 2rem;
+}
+
+@media (max-width: 700px) {
+  .cocreator-block { padding: 2rem 1.5rem; }
+}
+
+
+.layer-bridge {
+  margin-top: 5rem;
+  padding: 2.5rem 0;
+  border-top: 0.5px solid var(--border);
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+.layer-bridge-label {
+  font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.layer-bridge-link {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.15rem; color: var(--ink); text-decoration: none;
+  display: flex; align-items: baseline; gap: 1.2rem; flex-wrap: wrap;
+  transition: color 0.2s;
+}
+.layer-bridge-link:hover { color: var(--ink-mid); }
+.layer-bridge-arrow {
+  font-family: var(--mono); font-weight: 400; font-style: normal;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-soft); border: 0.5px solid var(--border);
+  padding: 0.4rem 1rem; transition: border-color 0.2s, color 0.2s;
+}
+.layer-bridge-link:hover .layer-bridge-arrow { border-color: var(--ink-soft); color: var(--ink); }
+
+/* LAYER MAP in footer */
+.layer-map {
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  padding-bottom: 2rem; margin-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.layer-sep {
+  font-size: 0.65rem; color: var(--border);
+}
+.layer-node {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  text-decoration: none; opacity: 0.5; transition: opacity 0.2s;
+}
+.layer-node:hover { opacity: 0.8; }
+.layer-node-active { opacity: 1; }
+.layer-node-label {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 0.85rem; color: var(--ink);
+}
+.layer-node-sub {
+  font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.layer-node-active .layer-node-label { color: var(--ink); }
+.layer-node-active .layer-node-sub {
+  color: var(--ink-mid);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .layer-map { gap: 1rem; }
+  .layer-sep { display: none; }
+  .layer-node { opacity: 0.6; }
+  .hero-statement { font-size: 1rem; }
+}
+
+/* FOOTER */
+footer { border-top: 0.5px solid var(--border); padding: 2.5rem 0; }
+.footer-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 0.5rem;
+  font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft);
+}
+.footer-center {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 0.85rem; letter-spacing: 0.04em; text-transform: none; color: var(--ink-soft);
+}
+
+/* SENSEMAKING SYSTEM */
+#sensemaking {
+  background: var(--ink);
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+}
+#sensemaking .sec-tag { color: rgba(255,255,255,0.28); }
+#sensemaking .sec-tag::after { background: rgba(255,255,255,0.1); }
+#sensemaking .section-h2 { color: rgba(255,255,255,0.88); max-width: 580px; }
+
+.sm-intro {
+  font-size: 0.78rem; line-height: 2; color: rgba(255,255,255,0.45);
+  max-width: 500px; margin-bottom: 5rem;
+  border-left: 0.5px solid rgba(255,255,255,0.1);
+  padding-left: 1.5rem;
+}
+
+.sm-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.5px; background: rgba(255,255,255,0.07);
+  border: 0.5px solid rgba(255,255,255,0.07);
+  margin-bottom: 6rem;
+}
+.sm-card {
+  background: var(--ink); padding: 3rem 2rem;
+  transition: background 0.3s;
+}
+.sm-card:hover { background: #201c1a; }
+.sm-num {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: 1.8rem; color: rgba(255,255,255,0.12);
+  line-height: 1; margin-bottom: 1.8rem; display: block;
+}
+.sm-name {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.1rem; color: rgba(255,255,255,0.85);
+  margin-bottom: 0.5rem; line-height: 1.25;
+}
+.sm-when {
+  font-size: 0.52rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); margin-bottom: 1.8rem; display: block;
+}
+.sm-desc {
+  font-size: 0.68rem; line-height: 1.85; color: rgba(255,255,255,0.42);
+  font-style: italic; font-family: var(--serif);
+}
+
+/* TRẬN ĐỒ 3 TẦNG */
+#trando { background: var(--stone); }
+.trando-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.5px; background: var(--border);
+  border: 0.5px solid var(--border);
+}
+.trando-node {
+  background: var(--cream); padding: 3rem 2rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+  text-decoration: none; transition: background 0.3s;
+  position: relative;
+}
+.trando-node:hover { background: var(--stone); }
+.trando-node-active { background: var(--ink); }
+.trando-node-active:hover { background: #201c1a; }
+
+.trando-tier {
+  font-size: 0.48rem; letter-spacing: 0.28em; text-transform: uppercase;
+}
+.trando-node .trando-tier { color: var(--ink-soft); }
+.trando-node-active .trando-tier { color: rgba(255,255,255,0.3); }
+
+.trando-name {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: 1.25rem; line-height: 1.2;
+}
+.trando-node .trando-name { color: var(--ink); }
+.trando-node-active .trando-name { color: rgba(255,255,255,0.88); }
+
+.trando-role {
+  font-size: 0.62rem; line-height: 1.8;
+}
+.trando-node .trando-role { color: var(--ink-mid); }
+.trando-node-active .trando-role { color: rgba(255,255,255,0.45); }
+
+.trando-link {
+  font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+  margin-top: auto;
+}
+.trando-node .trando-link { color: var(--ink-soft); }
+.trando-node-active .trando-link { color: rgba(255,255,255,0.3); }
+
+@media (max-width: 700px) {
+  .sm-grid { grid-template-columns: 1fr; }
+  .sm-card { padding: 2rem 1.5rem; }
+  .trando-grid { grid-template-columns: 1fr; }
+  .trando-node { padding: 2rem 1.5rem; }
+}
+
+
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.85s ease, transform 0.85s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* TABLET */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .wrap { padding: 0 2rem; }
+  .case-body { gap: 2rem; }
+  .case-result { min-width: 130px; }
+  .case-row { grid-template-columns: 7rem 1fr; }
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .wrap { padding: 0 1.25rem; }
+  section { padding: 5rem 0; }
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { gap: 0.8rem; }
+  .nav-link { display: none; }
+  .nav-cta { padding: 0.5rem 1rem; }
+
+  #hero { padding-top: 7rem; padding-bottom: 5rem; min-height: auto; }
+  h1 { font-size: clamp(1.75rem, 7.5vw, 2.4rem); margin-bottom: 2.5rem; }
+  .hero-divider { gap: 1.2rem; }
+  .hero-divider::before { height: 40px; }
+  .hero-sub { font-size: 0.7rem; }
+  .hero-cta-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+
+  .prob-item { grid-template-columns: 3rem 1fr; gap: 1.2rem; padding: 2rem 0; }
+  .prob-num { font-size: 1.8rem; }
+
+  .services { grid-template-columns: 1fr; }
+  .outcomes-strip { grid-template-columns: 1fr; }
+
+  .how-contrast { grid-template-columns: 1fr; }
+  .how-divider-v { display: none; }
+  .how-col { padding: 2rem 1.5rem; }
+  .how-col-right { border-top: 0.5px solid var(--border); }
+
+  .step { grid-template-columns: 3rem 1fr; gap: 1.2rem; padding: 2rem 0; }
+  .step-num { font-size: 1.8rem; }
+
+  .case-body { grid-template-columns: 1fr; gap: 2rem; }
+  .case-result { max-width: 100%; flex-direction: row; text-align: left; gap: 1.2rem; align-items: center; }
+  .case-result-num { font-size: 1.5rem; }
+  .case-row { grid-template-columns: 5.5rem 1fr; gap: 1rem; }
+
+  .belief-grid { grid-template-columns: 1fr; }
+  .belief-item { padding: 2rem 1.5rem; }
+
+  .input-row { grid-template-columns: 1fr; }
+  .q-block { margin-bottom: 3rem; }
+
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+  .footer-center { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<nav>
+  <span class="nav-brand">HL <span>· Vision</span></span>
+  <div class="nav-links">
+    <a href="#problem" class="nav-link">Triệu chứng</a>
+    <a href="#dathe" class="nav-link">Đại Thế</a>
+    <a href="#cal" class="nav-cta">Đặt lịch trao đổi →</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+<div class="wrap">
+  <p class="hero-label">Strategic Knowledge & Decision Architect</p>
+
+  <h1>
+    Khi doanh nghiệp lớn lên,<br>
+    thông tin nhiều hơn<br>
+    <em>nhưng sự rõ ràng lại ít đi.</em>
+  </h1>
+
+  <div class="hero-divider">
+    <p class="hero-sub">
+      Tri thức phân tán. Quyết định chậm. Mọi thứ phụ thuộc vào một vài người. AI có nhiều nhưng không biết dùng thế nào.<br><br>
+      Những thứ bạn thấy hằng ngày chỉ là triệu chứng. Vấn đề thật nằm ở cấu trúc bên dưới.
+    </p>
+  </div>
+
+  <div class="hero-statement">
+    Tôi không bán giải pháp chắp vá.<br>
+    Tôi vẽ lại bản đồ địa hình thông tin.
+  </div>
+
+  <div class="hero-cta-row">
+    <a href="#cal" class="btn-primary">Đặt lịch trao đổi &nbsp;→</a>
+    <span class="hero-note">Không cam kết. Bắt đầu bằng một cuộc trò chuyện ngắn.</span>
+  </div>
+</div>
+</section>
+
+<!-- ═══ PROBLEM ═══ -->
+<section id="problem">
+<div class="wrap">
+  <p class="sec-tag reveal">Giải phẫu triệu chứng</p>
+  <h2 class="section-h2 reveal" style="max-width:520px">Những thứ bạn thấy là triệu chứng.<br>Vấn đề thật nằm ở cấu trúc bên dưới.</h2>
+
+  <p class="problem-intro reveal">
+    Phần lớn nỗ lực sửa chữa không giải quyết được tận gốc — vì chúng đang sửa triệu chứng, không phải cơ chế đang tạo ra triệu chứng đó.
+    <strong>Khi cấu trúc thay đổi, nhiều vấn đề được giải quyết cùng lúc.</strong>
+  </p>
+
+  <div class="problem-list">
+
+    <div class="prob-item reveal">
+      <div class="prob-num">01</div>
+      <div>
+        <div class="prob-symptom">Mọi người liên tục hỏi cùng một câu hỏi</div>
+        <p class="prob-body">Không phải vì đội ngũ lười đọc. Hệ thống của bạn không có "lòng sông" — tri thức bị ném vào không gian phẳng mà không có cấu trúc tự điều hướng. Bạn đang dùng người để gánh nước thay vì đào mạch.</p>
+      </div>
+    </div>
+
+    <div class="prob-item reveal">
+      <div class="prob-num">02</div>
+      <div>
+        <div class="prob-symptom">Founder phải có mặt trong mọi quyết định</div>
+        <p class="prob-body">Không phải vì manager yếu. Tổ chức đang vận hành dựa trên "ý niệm cá nhân" thay vì "nguyên tắc gốc". Khi thiếu bộ lọc tiêu chí đồng nhất, Entropy hệ thống tự động ép dòng chảy quyết định dồn về phía bạn.</p>
+      </div>
+    </div>
+
+    <div class="prob-item reveal">
+      <div class="prob-num">03</div>
+      <div>
+        <div class="prob-symptom">Khi một người nghỉ, tổ chức mất đi một phần năng lực</div>
+        <p class="prob-body">Không phải vì nhân sự đó đặc biệt hơn người khác. Mà vì tri thức nằm trong đầu cá nhân — không có cấu trúc lưu trữ, không có cơ chế chuyển giao. Năng lực tổ chức đang được cất giữ ở nơi dễ mất nhất.</p>
+      </div>
+    </div>
+
+    <div class="prob-item reveal">
+      <div class="prob-num">04</div>
+      <div>
+        <div class="prob-symptom">AI được triển khai nhưng chỉ để làm việc vặt</div>
+        <p class="prob-body">Bạn đang mang một động cơ phản lực lắp vào một chiếc xe bò. AI không thiếu năng lực — AI thiếu Context Base sạch để soi đường. Khi nền tri thức bên dưới chưa được cấu trúc hóa, AI chỉ khuếch đại hỗn loạn nhanh hơn.</p>
+      </div>
+    </div>
+
+    <div class="prob-item reveal">
+      <div class="prob-num">05</div>
+      <div>
+        <div class="prob-symptom">Tuyển thêm người nhưng vẫn không giải quyết được quá tải</div>
+        <p class="prob-body">Không phải vì thiếu nhân sự giỏi. Cấu trúc vận hành không được thiết kế để scale — thêm người vào một hệ thống rò rỉ chỉ tạo ra thêm điểm rò rỉ. Vấn đề không nằm ở lưu lượng, mà nằm ở lòng sông.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="problem-valve reveal">
+    Thứ bạn đang thiếu không phải là một giải pháp mới.<br>
+    Mà là một mô hình để hiểu <em>vì sao vấn đề cứ quay trở lại.</em>
+  </div>
+</div>
+</section>
+
+<!-- ═══ ĐẠI THẾ ═══ -->
+<section id="dathe">
+<div class="wrap">
+  <p class="sec-tag reveal">Đại Thế Đang Dịch Chuyển</p>
+  <h2 class="section-h2 reveal" style="max-width:560px">Ba xu thế vĩ mô đang tạo ra chính xác những ma sát mà doanh nghiệp bạn đang chịu.</h2>
+  <p class="dathe-intro reveal">Đây không phải dự báo. Đây là cơ chế đang vận hành ngay bây giờ — và mỗi xu thế đều có một điểm chạm cụ thể với công việc tôi làm.</p>
+
+  <div class="dathe-grid">
+
+    <div class="dathe-card reveal">
+      <div class="dathe-num">01</div>
+      <div class="dathe-content">
+        <div class="dathe-trend-label">Xu thế</div>
+        <div class="dathe-trend">Từ "tích lũy bằng người" sang "kiến trúc tri thức ngầm"</div>
+        <div class="dathe-row">
+          <div class="dathe-block dathe-block-friction">
+            <div class="dathe-block-label">Ma sát phát sinh</div>
+            <div class="dathe-block-title">Knowledge Loss</div>
+            <p class="dathe-block-body">Tốc độ luân chuyển nhân sự tăng, làm việc remote/hybrid phân tán. Mỗi khi một người giỏi nghỉ, một phần bộ não doanh nghiệp biến mất cùng họ.</p>
+          </div>
+          <div class="dathe-block dathe-block-position">
+            <div class="dathe-block-label">Điểm chạm định vị</div>
+            <div class="dathe-block-title">Knowledge Architecture</div>
+            <p class="dathe-block-body">Thiết kế lại địa hình thông tin để tri thức được thu hoạch tự nhiên qua hành vi làm việc — thay vì ép nhân sự làm thêm một việc họ không muốn.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dathe-card reveal">
+      <div class="dathe-num">02</div>
+      <div class="dathe-content">
+        <div class="dathe-trend-label">Xu thế</div>
+        <div class="dathe-trend">Từ "quá tải thông tin" sang "giao thức điều áp quyết định"</div>
+        <div class="dathe-row">
+          <div class="dathe-block dathe-block-friction">
+            <div class="dathe-block-label">Ma sát phát sinh</div>
+            <div class="dathe-block-title">Founder Bottleneck</div>
+            <p class="dathe-block-body">Dữ liệu bùng nổ, càng nhiều kênh càng nhiều nhiễu. Founder mất năng lượng não cho quyết định vụn vặt, không còn không gian cho tư duy chiến lược.</p>
+          </div>
+          <div class="dathe-block dathe-block-position">
+            <div class="dathe-block-label">Điểm chạm định vị</div>
+            <div class="dathe-block-title">Decision System</div>
+            <p class="dathe-block-body">Thiết kế các protocol lọc ngưỡng nhận thức. Thông tin từ dưới lên phải đi qua màng lọc — đến tay founder dưới dạng context sạch nhất.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dathe-card reveal">
+      <div class="dathe-num">03</div>
+      <div class="dathe-content">
+        <div class="dathe-trend-label">Xu thế</div>
+        <div class="dathe-trend">Từ "ứng dụng AI bề nổi" sang "nhúng AI vào mạch vận hành"</div>
+        <div class="dathe-row">
+          <div class="dathe-block dathe-block-friction">
+            <div class="dathe-block-label">Ma sát phát sinh</div>
+            <div class="dathe-block-title">AI Adoption Friction</div>
+            <p class="dathe-block-body">Thị trường bước qua giai đoạn hào hứng vào giai đoạn thực chất. Mua tool cho nhân viên dùng lẻ tẻ chỉ tạo thêm một tầng ma sát mới.</p>
+          </div>
+          <div class="dathe-block dathe-block-position">
+            <div class="dathe-block-label">Điểm chạm định vị</div>
+            <div class="dathe-block-title">AI Enablement</div>
+            <p class="dathe-block-body">Không bán AI tool. Chuẩn hóa nền móng sạch trước — rồi nhúng AI vào đúng các điểm nghẽn của dòng chảy vận hành.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ═══ SENSEMAKING SYSTEM ═══ -->
+<section id="sensemaking">
+<div class="wrap">
+  <p class="sec-tag reveal">Hệ thống Kiến tạo Nhận thức</p>
+  <h2 class="section-h2 reveal">Tôi thiết lập một lòng sông<br>trống rỗng và tĩnh lặng ở lõi.</h2>
+
+  <p class="sm-intro reveal">
+    Không phải xây thêm công cụ. Không phải viết thêm tài liệu. Tôi thiết kế cấu trúc để dữ liệu thô từ thực tại tự nén thành tài sản tri thức — không trễ pha, không phụ thuộc vào ý chí của từng cá nhân.
+  </p>
+
+  <div class="sm-grid reveal">
+    <div class="sm-card">
+      <span class="sm-num">I</span>
+      <div class="sm-name">Knowledge Architecture</div>
+      <span class="sm-when">Không gian chứa Context</span>
+      <p class="sm-desc">Thiết kế địa hình thông tin để tri thức tự tìm được chỗ đứng — không cần ai nhắc nhở, không cần quy trình ép buộc.</p>
+    </div>
+    <div class="sm-card">
+      <span class="sm-num">II</span>
+      <div class="sm-name">Decision Architecture</div>
+      <span class="sm-when">Vách ngăn và bộ lọc quyền hạn</span>
+      <p class="sm-desc">Thiết kế nguyên tắc gốc để quyết định di chuyển đúng tầng — giải phóng bộ não founder khỏi sự vụ, giữ lại năng lượng cho chiến lược.</p>
+    </div>
+    <div class="sm-card">
+      <span class="sm-num">III</span>
+      <div class="sm-name">AI Context Layer</div>
+      <span class="sm-when">Nền móng sạch trước khi thả AI</span>
+      <p class="sm-desc">Chuẩn hóa cấu trúc bên dưới để AI có đủ context sạch để hoạt động — thay vì khuếch đại hỗn loạn đã có.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ TRẬN ĐỒ 3 TẦNG ═══ -->
+<section id="trando">
+<div class="wrap">
+  <p class="sec-tag reveal">Trận Đồ Ba Tầng</p>
+  <h2 class="section-h2 reveal" style="max-width:560px">Vision là lõi.<br>Journey và Operate là môi trường khúc xạ.</h2>
+
+  <div class="trando-grid reveal">
+
+    <a href="https://huynhle29951.github.io/hljourney/" class="trando-node">
+      <span class="trando-tier">Tầng 1 · Quá khứ / Pattern</span>
+      <div class="trando-name">HL · Journey</div>
+      <p class="trando-role">Nơi quét địa hình và tích lũy hạt nước quan sát từ thực địa. Entropy thô được thu hoạch, phân loại và nuôi dưỡng thành Pattern.</p>
+      <span class="trando-link">hljourney →</span>
+    </a>
+
+    <div class="trando-node trando-node-active">
+      <span class="trando-tier">Tầng 2 · Tương lai / Kiến trúc</span>
+      <div class="trando-name">HL · Vision</div>
+      <p class="trando-role">Nơi giải cấu trúc triệu chứng — thiết kế lòng sông nhận thức mới. Đây là lõi. Cái Không. Nơi cơ chế gốc được nhìn thấy và thiết kế lại.</p>
+      <span class="trando-link">Bạn đang ở đây</span>
+    </div>
+
+    <a href="https://huynhle29951.github.io/operate/" class="trando-node">
+      <span class="trando-tier">Tầng 3 · Thực tại / Vận hành</span>
+      <div class="trando-name">HL · Operate</div>
+      <p class="trando-role">Điểm chạm t = 0. Nơi các Protocol vận hành cụ thể được kích hoạt, đo áp suất và điều chỉnh theo thực địa.</p>
+      <span class="trando-link">operate →</span>
+    </a>
+
+  </div>
+</div>
+</section>
+
+<!-- ═══ CAL — ATTRACTOR GATE ═══ -->
+<section id="cal">
+<div class="wrap">
+  <p class="sec-tag reveal">Attractor Gate</p>
+  <h2 class="section-h2 reveal" style="max-width:520px; margin-bottom:1rem">Bốn câu hỏi để tôi<br>hiểu bức tranh của bạn.</h2>
+  <p class="cal-note reveal">Tôi không bắt đầu bằng pitch. Tôi bắt đầu bằng việc hiểu tổ chức của bạn đang thực sự vận hành như thế nào — và liệu đây có phải là vấn đề tôi có thể giúp không.</p>
+
+  <div id="the-form">
+
+    <div class="cocreator-block">
+      <div class="cocreator-tag">Mạch Thử Nghiệm Thực Địa · Mở Cấu Trúc Co-Creator</div>
+
+      <p class="cocreator-body">
+        Hệ thống K&D Architect đang được tinh chỉnh những bước cuối cùng trước khi đóng gói thành Protocol thương mại.
+      </p>
+      <p class="cocreator-body">
+        Trong pha này, tôi đang tìm đúng <strong>3 tổ chức</strong> dám nhìn thẳng vào ma sát hệ thống — để cùng chứng minh đòn bẩy của cấu trúc mới.
+      </p>
+
+      <div class="cocreator-offer">
+        <div class="cocreator-offer-row">
+          <span class="cocreator-offer-mark">←</span>
+          <span class="cocreator-offer-text">Bạn mang đến thực tại tổ chức — không giấu giếm điểm nghẽn.</span>
+        </div>
+        <div class="cocreator-offer-row">
+          <span class="cocreator-offer-mark">→</span>
+          <span class="cocreator-offer-text">Bạn có bộ não của một Architect đồng hành sát sườn, trực tiếp thiết kế lại địa hình thông tin — với chi phí tối thiểu, hoặc miễn phí nếu case study đủ độ phức tạp kích thích mạch nghiên cứu.</span>
+        </div>
+      </div>
+
+      <p class="cocreator-cta-text">Tôi không tìm người mua dịch vụ. Tôi tìm người đồng kiến trúc.<br>Nếu bạn muốn tổ chức của mình là 1 trong 3 Node đầu tiên — trả lời 4 câu hỏi bên dưới.</p>
+    </div>
+
+    <div class="q-block reveal">
+      <div class="q-num">Q — 01</div>
+      <p class="q-text">Tổ chức của bạn đang ở giai đoạn nào?</p>
+      <div class="opts" id="g1">
+        <button class="opt" onclick="pick(this,'g1')">Startup đang scale</button>
+        <button class="opt" onclick="pick(this,'g1')">SME đang mở rộng</button>
+        <button class="opt" onclick="pick(this,'g1')">Đội ngũ nội bộ lớn dần</button>
+        <button class="opt" onclick="pick(this,'g1')">Vừa bắt đầu ứng dụng AI</button>
+      </div>
+    </div>
+
+    <div class="q-block reveal">
+      <div class="q-num">Q — 02</div>
+      <p class="q-text">Ma sát nào đang gây ra nhiều tổn hao năng lượng nhất?</p>
+      <div class="opts" id="g2">
+        <button class="opt" onclick="pick(this,'g2')">Tri thức phân tán, không tìm được</button>
+        <button class="opt" onclick="pick(this,'g2')">Founder là điểm quyết định duy nhất</button>
+        <button class="opt" onclick="pick(this,'g2')">Quyết định không nhất quán giữa các nhóm</button>
+        <button class="opt" onclick="pick(this,'g2')">AI triển khai nhưng không tạo giá trị thực</button>
+      </div>
+    </div>
+
+    <div class="q-block reveal">
+      <div class="q-num">Q — 03</div>
+      <p class="q-text">Bạn đang tìm kiếm điều gì?</p>
+      <div class="opts" id="g3">
+        <button class="opt" onclick="pick(this,'g3')">Hiểu rõ cấu trúc gốc của vấn đề</button>
+        <button class="opt" onclick="pick(this,'g3')">Thiết kế lại hệ thống cụ thể</button>
+        <button class="opt" onclick="pick(this,'g3')">Đồng hành chiến lược dài hạn</button>
+      </div>
+    </div>
+
+    <div class="q-block reveal">
+      <div class="q-num">Q — 04</div>
+      <p class="q-text">Mức độ cấp bách?</p>
+      <div class="opts" id="g4">
+        <button class="opt" onclick="pick(this,'g4')">Cần giải quyết trong tháng này</button>
+        <button class="opt" onclick="pick(this,'g4')">Đang lên kế hoạch cho quý tới</button>
+        <button class="opt" onclick="pick(this,'g4')">Đang khảo sát, chưa vội</button>
+      </div>
+    </div>
+
+    <div class="input-row reveal">
+      <input type="text" id="f-name" placeholder="Tên / Handle">
+      <input type="text" id="f-contact" placeholder="Email hoặc Telegram">
+    </div>
+    <textarea id="f-note" rows="3" placeholder="Mô tả ngắn về tổ chức và tình huống hiện tại — càng thực tế càng tốt..."></textarea>
+
+    <button class="btn-submit reveal" onclick="submitForm()">
+      Gửi — Bắt đầu cuộc trò chuyện &nbsp; →
+    </button>
+    <p class="form-note reveal">Phản hồi trong 24–48 giờ. Không spam. Không cam kết ngay.</p>
+  </div>
+
+  <div id="success">
+    <h3>Đã nhận.</h3>
+    <p>Tôi sẽ đọc qua và phản hồi trong vòng 24–48 giờ.<br>Nếu phù hợp — chúng ta sẽ nói chuyện tiếp.</p>
+  </div>
+
+  <div class="layer-bridge">
+    <span class="layer-bridge-label">Tiếp theo</span>
+    <a href="https://huynhle29951.github.io/operate/" class="layer-bridge-link">
+      Hệ thống này vận hành trong thực tại như thế nào?
+      <span class="layer-bridge-arrow">→ Xem Mạch Vận Hành</span>
+    </a>
+  </div>
+
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+  <div class="layer-map reveal">
+    <a href="https://huynhle29951.github.io/hljourney/" class="layer-node">
+      <span class="layer-node-label">Hành Trình</span>
+      <span class="layer-node-sub">hljourney — Thực Tại & Pattern</span>
+    </a>
+    <span class="layer-sep">→</span>
+    <a href="https://huynhle29951.github.io/hlkarchitect/" class="layer-node layer-node-active">
+      <span class="layer-node-label">Kiến Trúc</span>
+      <span class="layer-node-sub">hlkarchitect — Cấu Trúc Gốc & Giải Pháp</span>
+    </a>
+    <span class="layer-sep">→</span>
+    <a href="https://huynhle29951.github.io/operate/" class="layer-node">
+      <span class="layer-node-label">Vận Hành</span>
+      <span class="layer-node-sub">Thực Thi & Protocol</span>
+    </a>
+  </div>
+  <div class="footer-inner">
+    <span>HL · 2026</span>
+    <span class="footer-center">Reality → Pattern → Structure → System</span>
+    <span>Strategic Knowledge & Decision Architect</span>
+  </div>
+</div>
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('bar').style.width =
+    (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('in'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+function pick(el, group) {
+  document.querySelectorAll('#' + group + ' .opt').forEach(o => o.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function submitForm() {
+  const contact = document.getElementById('f-contact').value.trim();
+  if (!contact) { document.getElementById('f-contact').focus(); return; }
+  document.getElementById('the-form').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
+}
+</script>
+</body>
+</html>
